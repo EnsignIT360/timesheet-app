@@ -1,6 +1,6 @@
 # Fieldwork Timesheet
 
-A small full-stack employee timesheet app built with React, Express, and Docker. Team members can submit hours and see the latest entries and running total.
+A small full-stack employee timesheet app built with React, Express, Docker, and Kubernetes. Team members can submit hours and see the latest entries and running total.
 
 ## Run the whole app with Docker
 
@@ -12,7 +12,7 @@ From the project root:
 docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The API runs at [http://localhost:5000](http://localhost:5000), and its health endpoint is [http://localhost:5000/api/health](http://localhost:5000/api/health).
+Open [http://localhost:3000](http://localhost:3000). NGINX serves the frontend and proxies `/api` requests to the backend. The backend is available locally at [http://localhost:5000](http://localhost:5000); its health endpoint is [http://localhost:5000/api/health](http://localhost:5000/api/health).
 
 To stop the containers, press `Ctrl+C`, then run `docker compose down`.
 
@@ -25,7 +25,7 @@ npm install --prefix frontend
 npm run dev
 ```
 
-The frontend is at `http://localhost:3000` and the backend is at `http://localhost:5000`.
+The Vite development server is at `http://localhost:3000` and proxies `/api` requests to the backend at `http://localhost:5000`.
 
 ## API
 
@@ -48,16 +48,55 @@ Entries are kept in backend memory, matching the lab guide. Restarting the backe
 ```bash
 docker build -t timesheet-backend ./backend
 docker build -t timesheet-frontend ./frontend
-docker run --rm -p 5000:5000 -e FRONTEND_ORIGIN=http://localhost:3000 timesheet-backend
 ```
 
-In a second terminal:
+The frontend NGINX image proxies API requests to the `timesheet-backend` service on the same container network. Use Docker Compose to run the two containers together.
 
-```bash
-docker run --rm -p 3000:3000 -e VITE_API_URL=http://localhost:5000/api timesheet-frontend
-```
+## Deploy to Google Kubernetes Engine (GKE)
 
-For a convenient two-container run, use `docker compose up --build` instead.
+The manifests in `k8s/` deploy one backend replica behind an internal `ClusterIP` service named `backend` and one frontend replica behind a public `LoadBalancer` service. The browser uses the frontend's `/api` proxy, so the backend does not need a public IP.
+
+Prerequisites: Google Cloud CLI (`gcloud`), `kubectl`, a Google Cloud project with billing enabled, and permission to create GKE and Artifact Registry resources. Choose a region supported by your GKE setup. The commands below use `us-central1`.
+
+1. Set your project and region, then enable the APIs:
+
+   ```bash
+   gcloud config set project PROJECT_ID
+   gcloud services enable container.googleapis.com artifactregistry.googleapis.com
+   ```
+
+2. Create a Docker repository in Artifact Registry and configure Docker authentication:
+
+   ```bash
+   gcloud artifacts repositories create timesheets --repository-format=docker --location=us-central1
+   gcloud auth configure-docker us-central1-docker.pkg.dev
+   ```
+
+3. Build and push both images. Replace `PROJECT_ID` with your Google Cloud project ID:
+
+   ```bash
+   docker build -t us-central1-docker.pkg.dev/PROJECT_ID/timesheets/timesheet-backend:latest ./backend
+   docker push us-central1-docker.pkg.dev/PROJECT_ID/timesheets/timesheet-backend:latest
+   docker build -t us-central1-docker.pkg.dev/PROJECT_ID/timesheets/timesheet-frontend:latest ./frontend
+   docker push us-central1-docker.pkg.dev/PROJECT_ID/timesheets/timesheet-frontend:latest
+   ```
+
+4. In `k8s/kustomization.yaml`, replace `PROJECT_ID` in both image paths with your project ID. If using a different region, update `us-central1` there too.
+
+5. Connect `kubectl` to your existing GKE cluster and deploy:
+
+   ```bash
+   gcloud container clusters get-credentials CLUSTER_NAME --region us-central1
+   kubectl apply -k k8s/
+   kubectl -n timesheet get pods
+   kubectl -n timesheet get service timesheet-frontend --watch
+   ```
+
+   Open the external IP shown for `timesheet-frontend` in a browser. If the cluster is in a different project from Artifact Registry, grant the cluster's node service account the Artifact Registry Reader role for the image repository.
+
+The app stores entries in backend memory to match the lab guide. A backend restart clears them, so use a database before relying on GKE for durable timesheet records. GKE and external load balancers can incur Google Cloud charges.
+
+Google Cloud references: [GKE and Artifact Registry](https://cloud.google.com/artifact-registry/docs/integrate-gke) and [Docker authentication for Artifact Registry](https://cloud.google.com/artifact-registry/docs/docker/authentication).
 
 ## Team contributions
 
