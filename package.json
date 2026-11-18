@@ -1,0 +1,14 @@
+{
+  "name": "timesheet-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A full-stack employee timesheet app built with React, Express, and Docker.",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix frontend",
+    "start": "docker compose up --build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
