@@ -108,4 +108,16 @@ Add the team members and their contributions before submitting:
 
 ## Submission evidence
 
-Save labeled screenshots in `screenshots/` for the backend container, frontend container, and the frontend with submitted entries. Include the GitHub repository URL in the submission.
+### Docker containers
+
+The frontend container is running, and the backend container is healthy.
+
+![Docker Compose showing the frontend running and backend healthy](screenshots/docker-containers.png)
+
+### Timesheet UI with submitted entries
+
+![Timesheet UI showing two submitted entries](screenshots/timesheet-ui-two-entries.png)
+
+![Timesheet UI showing one submitted entry](screenshots/timesheet-ui-one-entry.png)
+
+GitHub repository: [aaronjsmith/timesheet-app](https://github.com/aaronjsmith/timesheet-app).
