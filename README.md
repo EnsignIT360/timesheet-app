@@ -2,6 +2,22 @@
 
 A small full-stack employee timesheet app built with React, Express, Docker, and Kubernetes. Team members can submit hours and see the latest entries and running total.
 
+## Submission evidence
+
+### Docker containers
+
+The frontend container is running, and the backend container is healthy.
+
+![Docker Compose showing the frontend running and backend healthy](screenshots/docker-containers.png)
+
+### Timesheet UI with submitted entries
+
+![Timesheet UI showing two submitted entries](screenshots/timesheet-ui-two-entries.png)
+
+![Timesheet UI showing one submitted entry](screenshots/timesheet-ui-one-entry.png)
+
+GitHub repository: [EnsignIT360/timesheet-app](https://github.com/EnsignIT360/timesheet-app).
+
 ## Run the whole app with Docker
 
 Requirements: Docker Desktop with Docker Compose.
@@ -106,18 +122,3 @@ Add the team members and their contributions before submitting:
 | --- | --- |
 | _Add name_ | _Add contribution_ |
 
-## Submission evidence
-
-### Docker containers
-
-The frontend container is running, and the backend container is healthy.
-
-![Docker Compose showing the frontend running and backend healthy](screenshots/docker-containers.png)
-
-### Timesheet UI with submitted entries
-
-![Timesheet UI showing two submitted entries](screenshots/timesheet-ui-two-entries.png)
-
-![Timesheet UI showing one submitted entry](screenshots/timesheet-ui-one-entry.png)
-
-GitHub repository: [EnsignIT360/timesheet-app](https://github.com/EnsignIT360/timesheet-app).
