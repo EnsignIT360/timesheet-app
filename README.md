@@ -1,5 +1,7 @@
 # Fieldwork Timesheet
 
+**Assignment:** 4.3 Team Lab 1 Building and Containerizing a Full-Stack Timesheet Application
+
 A small full-stack employee timesheet app built with React, Express, Docker, and Kubernetes. Team members can submit hours and see the latest entries and running total.
 
 ## Submission evidence
