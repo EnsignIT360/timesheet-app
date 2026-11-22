@@ -116,7 +116,8 @@ Google Cloud references: [GKE and Artifact Registry](https://cloud.google.com/ar
 
 ## Team contributions
 
-**Scrum Master:** Alan Sanchez  
+**Scrum Master:** Alan Sanchez
+
 **Team members present:** Aaron Smith, Abraham Osorio Lagunas, Alan Sanchez
 
 | Team member | Contribution |
