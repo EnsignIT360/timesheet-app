@@ -116,9 +116,15 @@ Google Cloud references: [GKE and Artifact Registry](https://cloud.google.com/ar
 
 ## Team contributions
 
-Add the team members and their contributions before submitting:
+**Scrum Master:** Alan Sanchez  
+**Team members present:** Aaron Smith, Abraham Osorio Lagunas, Alan Sanchez
 
 | Team member | Contribution |
 | --- | --- |
-| _Add name_ | _Add contribution_ |
+| Aaron Smith | Built the timesheet application, containerized the services, and deployed the project to Google Kubernetes Engine. |
+| Abraham Osorio Lagunas | Attended the team session; contributed project support and Scrum documentation. |
+| Alan Sanchez | Scrum Master; supported team coordination. |
+| James King JR | Project support and Scrum documentation. |
+| Marco Chiong | Project support and Scrum documentation. |
+| Matias Vazquez | Project support and Scrum documentation. |
 
