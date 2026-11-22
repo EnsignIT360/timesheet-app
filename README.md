@@ -54,7 +54,7 @@ The frontend NGINX image proxies API requests to the `timesheet-backend` service
 
 ## Deploy to Google Kubernetes Engine (GKE)
 
-The manifests in `k8s/` deploy one backend replica behind an internal `ClusterIP` service named `backend` and one frontend replica behind a public `LoadBalancer` service. The browser uses the frontend's `/api` proxy, so the backend does not need a public IP.
+The manifests in `k8s/` deploy one backend replica behind an internal `ClusterIP` service named `backend` and one frontend replica behind an internal `ClusterIP` service. The browser uses the frontend's `/api` proxy, so the backend does not need a public IP or a billable public load balancer. Use `kubectl port-forward` to open the frontend locally.
 
 Prerequisites: Google Cloud CLI (`gcloud`), `kubectl`, a Google Cloud project with billing enabled, and permission to create GKE and Artifact Registry resources. Choose a region supported by your GKE setup. The commands below use `us-central1`.
 
@@ -89,10 +89,10 @@ Prerequisites: Google Cloud CLI (`gcloud`), `kubectl`, a Google Cloud project wi
    gcloud container clusters get-credentials CLUSTER_NAME --region us-central1
    kubectl apply -k k8s/
    kubectl -n timesheet get pods
-   kubectl -n timesheet get service timesheet-frontend --watch
+   kubectl -n timesheet port-forward service/timesheet-frontend 8080:80
    ```
 
-   Open the external IP shown for `timesheet-frontend` in a browser. If the cluster is in a different project from Artifact Registry, grant the cluster's node service account the Artifact Registry Reader role for the image repository.
+   Open [http://localhost:8080](http://localhost:8080) in a browser. If the cluster is in a different project from Artifact Registry, grant the cluster's node service account the Artifact Registry Reader role for the image repository.
 
 The app stores entries in backend memory to match the lab guide. A backend restart clears them, so use a database before relying on GKE for durable timesheet records. GKE and external load balancers can incur Google Cloud charges.
 
