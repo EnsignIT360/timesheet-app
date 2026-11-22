@@ -120,4 +120,4 @@ The frontend container is running, and the backend container is healthy.
 
 ![Timesheet UI showing one submitted entry](screenshots/timesheet-ui-one-entry.png)
 
-GitHub repository: [aaronjsmith/timesheet-app](https://github.com/aaronjsmith/timesheet-app).
+GitHub repository: [EnsignIT360/timesheet-app](https://github.com/EnsignIT360/timesheet-app).
